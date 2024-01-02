@@ -4,303 +4,303 @@ using System.Windows.Forms;
 
 public class CaptureForm : Form
 {
-	//スクリーンショットボタン
-	private Button screenButton;
-	//終了ボタン
-	private Button exitButton;
-	//撮影した画像
-	private Bitmap capturedImage;
-	//キャプチャフォーム
-	private ScreenForm captureForm;
-	//キャプチャ画像を表示するフォーム
-	private Form capturedImageForm;
+    //スクリーンショットボタン
+    private Button screenButton;
+    //終了ボタン
+    private Button exitButton;
+    //撮影した画像
+    private Bitmap capturedImage;
+    //キャプチャフォーム
+    private ScreenForm captureForm;
+    //キャプチャ画像を表示するフォーム
+    private Form capturedImageForm;
 
-	/// <summary>
-	/// CaptureFormフォーム
-	/// </summary>
-	public CaptureForm()
-	{
-		Text = "ScreenShotApp";
-		Size = new Size(250, 150);
+    /// <summary>
+    /// CaptureFormフォーム
+    /// </summary>
+    public CaptureForm()
+    {
+        Text = "Capture";
+        Size = new Size(250, 150);
+        this.Enabled = true;
 
-		screenButton = new Button
-		{
-			Text = "スナップショット",
-			Location = new Point(50, 50),
-			Size = new Size(100,50),
-			BackColor = Color.Plum
-		};
-		// スクリーンショットボタン押下時
-		screenButton.Click += screenButton_Click;
+        screenButton = new Button
+        {
+            Text = "Capture",
+            Location = new Point(20, 35),
+            Size = new Size(90, 50),
+            BackColor = Color.Plum
+        };
+        // スクリーンショットボタン押下時
+        screenButton.Click += screenButton_Click;
 
-		exitButton = new Button
-		{
-			Text = "終了する",
-			Location = new Point(150, 50),
-			Size = new Size(100, 50),
-			BackColor = Color.OliveDrab
-		};
-		//終了ボタン押下時
-		exitButton.Click += ExitButton_Click;
+        exitButton = new Button
+        {
+            Text = "Edit",
+            Location = new Point(125, 35),
+            Size = new Size(90, 50),
+            BackColor = Color.YellowGreen
+        };
+        //終了ボタン押下時
+        exitButton.Click += ExitButton_Click;
 
-		// ボタンをフォームに追加
-		Controls.Add(screenButton);
-		Controls.Add(exitButton);
+        // ボタンをフォームに追加
+        Controls.Add(screenButton);
+        Controls.Add(exitButton);
 
-		// フォームを作成
-		//captureForm = new ScreenForm();
-		//表示位置を右下固定にする設定を判断する！
-		int ScreenWidth = Screen.PrimaryScreen.WorkingArea.Width;
-		int Screenheigth = Screen.PrimaryScreen.WorkingArea.Height;
-		int AppWidth = this.Width;
-		int AppHeight = this.Height;
+        // フォームを作成
+        //captureForm = new ScreenForm();
+        //表示位置を右下固定にする設定を判断する！
+        int ScreenWidth = Screen.PrimaryScreen.WorkingArea.Width;
+        int Screenheigth = Screen.PrimaryScreen.WorkingArea.Height;
+        int AppWidth = this.Width;
+        int AppHeight = this.Height;
 
-		int AppLeftXPos = ScreenWidth - AppWidth;
-		int AppLeftYPos = Screenheigth - AppHeight;
+        int AppLeftXPos = ScreenWidth - AppWidth;
+        int AppLeftYPos = Screenheigth - AppHeight;
 
-		Rectangle tempRect = new Rectangle(AppLeftXPos, AppLeftYPos, AppWidth, AppHeight);
-		this.DesktopBounds = tempRect;
-		this.StartPosition = FormStartPosition.Manual;
-	}
+        Rectangle tempRect = new Rectangle(AppLeftXPos, AppLeftYPos, AppWidth, AppHeight);
+        this.DesktopBounds = tempRect;
+        this.StartPosition = FormStartPosition.Manual;
+    }
 
-	/// <summary>
-	/// スクリーンショットボタン押下時
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void screenButton_Click(object sender, EventArgs e)
-	{
-		//
-		captureForm = new ScreenForm();
-		// フォームを非表示にする
-		//this.Hide();
-		this.TopMost = true;
+    /// <summary>
+    /// スクリーンショットボタン押下時
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void screenButton_Click(object sender, EventArgs e)
+    {
+        captureForm = new ScreenForm();
+        // フォームを非表示にする
+        //this.Hide();
+        this.TopMost = true;
 
-		// スクリーンショットの範囲を選択
-		Rectangle captureArea;
+        // スクリーンショットの範囲を選択
+        Rectangle captureArea;
 
-		// モーダルダイアログの表示
-		if (captureForm.ShowDialog() == DialogResult.OK)
-		{
-			// キャプチャ範囲を取得
-			captureArea = captureForm.CaptureRectangle;
-			// ビットマップを作成
-			capturedImage = new Bitmap(captureArea.Width, captureArea.Height);
-			using (Graphics g = Graphics.FromImage(capturedImage))
-			{
-				// スクリーンから画像をコピー
-				g.CopyFromScreen(captureArea.Left, captureArea.Top, 0, 0, capturedImage.Size);
-			}
+        // モーダルダイアログの表示
+        if (captureForm.ShowDialog() == DialogResult.OK)
+        {
+            // キャプチャ範囲を取得
+            captureArea = captureForm.CaptureRectangle;
+            // ビットマップを作成
+            capturedImage = new Bitmap(captureArea.Width, captureArea.Height);
+            using (Graphics g = Graphics.FromImage(capturedImage))
+            {
+                // スクリーンから画像をコピー
+                g.CopyFromScreen(captureArea.Left, captureArea.Top, 0, 0, capturedImage.Size);
+            }
 
 
-			capturedImageForm = new Form
-			{
-				Text = "ScreenImage",
-				FormBorderStyle = FormBorderStyle.Sizable, // サイズ変更を許可
-				SizeGripStyle = SizeGripStyle.Auto, // サイズグリップの変更
-			};
+            capturedImageForm = new Form
+            {
+                Text = "Capture",
+                FormBorderStyle = FormBorderStyle.Sizable, // サイズ変更を許可
+                SizeGripStyle = SizeGripStyle.Auto, // サイズグリップの変更
+            };
 
-			// キャプチャ画像の初期表示
-			PictureBox pictureBox = new PictureBox
-			{
-				Image = capturedImage, // キャプチャされた画像の表示
-				Dock = DockStyle.Fill // サイズを合わせる
-			};
-			capturedImageForm.Controls.Add(pictureBox);
+            // キャプチャ画像の初期表示
+            PictureBox pictureBox = new PictureBox
+            {
+                Image = capturedImage, // キャプチャされた画像の表示
+                Dock = DockStyle.Fill // サイズを合わせる
+            };
+            capturedImageForm.Controls.Add(pictureBox);
 
-			// フォームサイズを設定
-			capturedImageForm.Size = new Size(capturedImage.Width + 15, capturedImage.Height + 40);
+            // フォームサイズを設定
+            capturedImageForm.Size = new Size(capturedImage.Width + 15, capturedImage.Height + 40);
 
-			// フォームサイズ変更イベントを設定
-			capturedImageForm.SizeChanged += CapturedImageForm_SizeChanged; 
+            // フォームサイズ変更イベントを設定
+            capturedImageForm.SizeChanged += CapturedImageForm_SizeChanged;
 
-			// 最前面に表示
-			capturedImageForm.TopMost = true;
-			// 表示
-			capturedImageForm.ShowDialog();
-		}
-		// フォームを再表示
-		this.Show();
-	}
+            // 最前面に表示
+            capturedImageForm.TopMost = true;
+            // 表示
+            capturedImageForm.Show();
+        }
+        // フォームを再表示
+        this.Show();
+    }
 
-	/// <summary>
-	/// 終了ボタン押下時
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void ExitButton_Click(object sender, EventArgs e)
-	{
-		Application.Exit();
-	}
+    /// <summary>
+    /// 終了ボタン押下時
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ExitButton_Click(object sender, EventArgs e)
+    {
+        Application.Exit();
+    }
 
-	private void CapturedImageForm_SizeChanged(object sender, EventArgs e)
-	{
-		// キャプチャ画像とフォームが存在する場合
-		if (capturedImage != null && capturedImageForm != null)
-		{
-			// キャプチャ画像の比率を保持して新しいサイズを計算
-			float widthRatio = (float)capturedImage.Width / capturedImageForm.Width;
-			float heightRatio = (float)capturedImage.Height / capturedImageForm.Height;
-			int newWidth, newHeight;
+    private void CapturedImageForm_SizeChanged(object sender, EventArgs e)
+    {
+        // キャプチャ画像とフォームが存在する場合
+        if (capturedImage != null && capturedImageForm != null)
+        {
+            // キャプチャ画像の比率を保持して新しいサイズを計算
+            float widthRatio = (float)capturedImage.Width / capturedImageForm.Width;
+            float heightRatio = (float)capturedImage.Height / capturedImageForm.Height;
+            int newWidth, newHeight;
 
-			// 幅の比率が高い場合、幅をフォームに合わせて調整
-			if (widthRatio > heightRatio)
-			{
-				newWidth = capturedImageForm.Width;
-				newHeight = (int)(capturedImage.Height / widthRatio);
-			}
+            // 幅の比率が高い場合、幅をフォームに合わせて調整
+            if (widthRatio > heightRatio)
+            {
+                newWidth = capturedImageForm.Width;
+                newHeight = (int)(capturedImage.Height / widthRatio);
+            }
 
-			// 高さの比率が高い場合、高さをフォームに合わせて調整
-			else
-			{
-				newWidth = (int)(capturedImage.Width / heightRatio);
-				newHeight = capturedImageForm.Height;
-			}
+            // 高さの比率が高い場合、高さをフォームに合わせて調整
+            else
+            {
+                newWidth = (int)(capturedImage.Width / heightRatio);
+                newHeight = capturedImageForm.Height;
+            }
 
-			// サイズを更新
-			PictureBox pictureBox = (PictureBox)capturedImageForm.Controls[0];
-			pictureBox.Image = new Bitmap(capturedImage, newWidth, newHeight);
-		}
-	}
+            // サイズを更新
+            PictureBox pictureBox = (PictureBox)capturedImageForm.Controls[0];
+            pictureBox.Image = new Bitmap(capturedImage, newWidth, newHeight);
+        }
+    }
 
-	/// <summary>
-	/// 処理実行 
-	/// </summary>
-	[STAThread]
-	public static void Main()
-	{
-		Application.Run(new CaptureForm());
-	}
+    /// <summary>
+    /// 処理実行 
+    /// </summary>
+    [STAThread]
+    public static void Main()
+    {
+        Application.Run(new CaptureForm());
+    }
 }
 
 public class ScreenForm : Form
 {
-	private Point startPoint;
-	private Point endPoint;
-	private Rectangle captureRectangle;
-	private bool isCapturing;
+    private Point startPoint;
+    private Point endPoint;
+    private Rectangle captureRectangle;
+    private bool isCapturing;
 
-	public Rectangle CaptureRectangle
-	{
-		get { return captureRectangle; }
-	}
+    public Rectangle CaptureRectangle
+    {
+        get { return captureRectangle; }
+    }
 
-	/// <summary>
-	/// 新規のキャプチャフォームを作成
-	/// </summary>
-	public ScreenForm()
-	{
-		this.DoubleBuffered = true;
-		// 境界線なし
-		FormBorderStyle = FormBorderStyle.None;
-		// フォームの最大化
-		WindowState = FormWindowState.Maximized;
-		// 十字カーソル
-		Cursor = Cursors.Cross;
-		// 背景色を設定
-		BackColor = Color.CornflowerBlue;
-		// 透明度を設定
-		//Opacity = 0.5;
-		// 背景を透明にする
-		this.TransparencyKey = Color.CornflowerBlue;
+    /// <summary>
+    /// 新規のキャプチャフォームを作成
+    /// </summary>
+    public ScreenForm()
+    {
+        this.DoubleBuffered = true;
+        // 境界線なし
+        FormBorderStyle = FormBorderStyle.None;
+        // フォームの最大化
+        WindowState = FormWindowState.Maximized;
+        // 十字カーソル
+        Cursor = Cursors.Cross;
+        // 背景色を設定
+        BackColor = Color.CornflowerBlue;
+        // 透明度を設定
+        //Opacity = 0.5;
+        // 背景を透明にする
+        this.TransparencyKey = Color.CornflowerBlue;
 
-		// ボタン押下時
-		MouseDown += ScreenScreenShotForm_MouseDown;
-		// マウス移動時
-		MouseMove += ScreenScreenShotForm_MouseMove;
-		// マウスが離された時
-		MouseUp += ScreenScreenShotForm_MouseUp;
+        // ボタン押下時
+        MouseDown += ScreenScreenShotForm_MouseDown;
+        // マウス移動時
+        MouseMove += ScreenScreenShotForm_MouseMove;
+        // マウスが離された時
+        MouseUp += ScreenScreenShotForm_MouseUp;
 
-	}
+    }
 
-	/// <summary>
-	/// ボタン押下時
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void ScreenScreenShotForm_MouseDown(object sender, MouseEventArgs e)
-	{
-		// ボタンがクリックされたとき
-		if (e.Button == MouseButtons.Left)
-		{
-			//スタートの位置を取得
-			startPoint = e.Location;
-			isCapturing = true;
-		}
-	}
+    /// <summary>
+    /// ボタン押下時
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ScreenScreenShotForm_MouseDown(object sender, MouseEventArgs e)
+    {
+        // ボタンがクリックされたとき
+        if (e.Button == MouseButtons.Left)
+        {
+            //スタートの位置を取得
+            startPoint = e.Location;
+            isCapturing = true;
+        }
+    }
 
-	/// <summary>
-	/// マウス移動時
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void ScreenScreenShotForm_MouseMove(object sender, MouseEventArgs e)
-	{
-		// ボタンがクリックされている時
-		if (isCapturing)
-		{
-			//エンドの位置を取得
-			endPoint = e.Location;
-			//スタートとエンドの位置から範囲を計算
-			captureRectangle = new Rectangle(
-				Math.Min(startPoint.X, endPoint.X),
-				Math.Min(startPoint.Y, endPoint.Y),
-				Math.Abs(endPoint.X - startPoint.X),
-				Math.Abs(endPoint.Y - startPoint.Y));
+    /// <summary>
+    /// マウス移動時
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ScreenScreenShotForm_MouseMove(object sender, MouseEventArgs e)
+    {
+        // ボタンがクリックされている時
+        if (isCapturing)
+        {
+            //エンドの位置を取得
+            endPoint = e.Location;
+            //スタートとエンドの位置から範囲を計算
+            captureRectangle = new Rectangle(
+                Math.Min(startPoint.X, endPoint.X),
+                Math.Min(startPoint.Y, endPoint.Y),
+                Math.Abs(endPoint.X - startPoint.X),
+                Math.Abs(endPoint.Y - startPoint.Y));
 
-			//フォームの再描写
-			Invalidate();//一度背景色で全体を塗りつぶすため、チラつくらしい？。修正必要。
-		}
-	}
+            //フォームの再描写
+            Invalidate();//一度背景色で全体を塗りつぶすため、チラつくらしい？。修正必要。
+        }
+    }
 
 
-	/// <summary>
-	/// マウスが離された時
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void ScreenScreenShotForm_MouseUp(object sender, MouseEventArgs e)
-	{
-		if (isCapturing)
-		{
-			isCapturing = false;
-			DialogResult = DialogResult.OK;
-			Close();
-		}
-	}
+    /// <summary>
+    /// マウスが離された時
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ScreenScreenShotForm_MouseUp(object sender, MouseEventArgs e)
+    {
+        if (isCapturing)
+        {
+            isCapturing = false;
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+    }
 
-	/// <summary>
-	/// フォーム描写中の動作
-	/// </summary>
-	/// <param name="e"></param>
-	protected override void OnPaint(PaintEventArgs e)
-	{
-		//BackColor
-		Opacity = 0.7;
-	    base.OnPaint(e);
-		using (SolidBrush brush = new SolidBrush(Color.LightSlateGray))
-		{
-			Rectangle clientRect = new Rectangle(0, 0, Width, Height);
-			using (Region outerRegion = new Region(clientRect))
-			using (Region innerRegion = new Region(captureRectangle))
-			{
-				// キャプチャ範囲を除外
-				outerRegion.Exclude(innerRegion);
-				// キャプチャ範囲の外側を描写
-				e.Graphics.FillRegion(brush, outerRegion);
-			}
-		}
+    /// <summary>
+    /// フォーム描写中の動作
+    /// </summary>
+    /// <param name="e"></param>
+    protected override void OnPaint(PaintEventArgs e)
+    {
+        //BackColor
+        Opacity = 0.7;
+        base.OnPaint(e);
+        using (SolidBrush brush = new SolidBrush(Color.LightSlateGray))
+        {
+            Rectangle clientRect = new Rectangle(0, 0, Width, Height);
+            using (Region outerRegion = new Region(clientRect))
+            using (Region innerRegion = new Region(captureRectangle))
+            {
+                // キャプチャ範囲を除外
+                outerRegion.Exclude(innerRegion);
+                // キャプチャ範囲の外側を描写
+                e.Graphics.FillRegion(brush, outerRegion);
+            }
+        }
 
-		// キャプチャ範囲の境界を描写
-	    using (Pen pen = new Pen(Color.White, 1))
-		{
-			e.Graphics.DrawRectangle(pen, captureRectangle);
-		}
+        // キャプチャ範囲の境界を描写
+        using (Pen pen = new Pen(Color.White, 1))
+        {
+            e.Graphics.DrawRectangle(pen, captureRectangle);
+        }
 
-		// キャプチャ範囲を透明に
-		using (SolidBrush transparentBrush = new SolidBrush(Color.FromArgb(0, Color.Black)))
-		{
-		    e.Graphics.FillRectangle(transparentBrush, captureRectangle);
-		}
-	}
+        // キャプチャ範囲を透明に
+        using (SolidBrush transparentBrush = new SolidBrush(Color.FromArgb(0, Color.Black)))
+        {
+            e.Graphics.FillRectangle(transparentBrush, captureRectangle);
+        }
+    }
 }
